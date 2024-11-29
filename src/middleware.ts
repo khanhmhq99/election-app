@@ -17,18 +17,18 @@ export default async function middleware(req: NextRequest) {
 //   const session = await decrypt(cookie)
  
   // 4. Redirect to /login if the user is not authenticated
-//   if (isProtectedRoute && !session?.userId) {
-//     return NextResponse.redirect(new URL('/login', req.nextUrl))
-//   }
+  if (isProtectedRoute && !cookie) {
+    return NextResponse.redirect(new URL('/login', req.nextUrl))
+  }
  
-//   // 5. Redirect to /dashboard if the user is authenticated
-//   if (
-//     isPublicRoute &&
-//     session?.userId &&
-//     !req.nextUrl.pathname.startsWith('/dashboard')
-//   ) {
-//     return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
-//   }
+  // 5. Redirect to /dashboard if the user is authenticated
+  if (
+    isPublicRoute &&
+    cookie &&
+    !req.nextUrl.pathname.startsWith('/dashboard')
+  ) {
+    return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+  }
  
   return NextResponse.next()
 }

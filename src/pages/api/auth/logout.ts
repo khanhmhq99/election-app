@@ -1,15 +1,19 @@
-import { login } from "@/app/lib/auth"
 import { NextApiRequest, NextApiResponse } from "next"
+import { serialize } from 'cookie';
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     try {
-        const { dress } = req.body
-        await login(dress)
-
-        res.status(200).json({ success: true })
+        const cookie = serialize('session', '', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 0,
+            path: '/',
+        })
+        res.setHeader('Set-Cookie', cookie)
+        res.status(200).json({ message: req.body })
     } catch (error: any) {
         if (error.type === 'CredentialsSignin') {
             res.status(401).json({ error: 'Invalid credentials.' })

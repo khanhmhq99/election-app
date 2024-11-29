@@ -15,9 +15,11 @@ import { connectToBlockchain } from "@/core/connections/BlockchainConnection"
 import { useToast } from "@/hooks/use-toast"
 import { cookies } from 'next/headers';
 import { login } from "@/app/lib/auth";
+import { useRouter } from 'next/navigation'
 
 export function LoginForm() {
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleRegister = async () => {
     try {
@@ -31,11 +33,11 @@ export function LoginForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ address: signer.address }),
       })
-      console.log(response)
+      router.push("/dashboard");
     } catch (error) {
       toast({
         title: "Error",
-        description: "Something wrong!",
+        description: "Something wrong",
       });
     }
   };
